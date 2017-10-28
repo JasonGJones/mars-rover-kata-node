@@ -1,0 +1,15 @@
+{
+  "name": "mars-rover-kata",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node kata.js",
+    "test": "jasmine"
+  },
+  "keywords": [],
+  "author": "jjones",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jasmine": "^2.8.0"
+  }
+}
