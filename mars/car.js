@@ -1,13 +1,13 @@
 require('./landscape');
-function parseState(state){
+function parseState(state) {
     var arrState = state.split(' ');
     if (
-            arrState.length === 3 && 
-            Number.isInteger(Number(arrState[0])) &&
-            Number.isInteger(Number(arrState[1])) &&
-            ['N', 'E', 'S', 'W'].includes(arrState[2])
-    
-    ){
+        arrState.length === 3 &&
+        Number.isInteger(Number(arrState[0])) &&
+        Number.isInteger(Number(arrState[1])) &&
+        ['N', 'E', 'S', 'W'].includes(arrState[2])
+
+    ) {
         return {
             x: arrState[0],
             y: arrState[1],
@@ -18,10 +18,10 @@ function parseState(state){
     }
 
 
-    
+
 
 }
-function getDefaultState(){
+function getDefaultState() {
     return {
         x: 0,
         y: 0,
@@ -29,68 +29,69 @@ function getDefaultState(){
     }
 }
 
-function parseInstruction(moveInstruction){
-    return moveInstruction.split("");
+function parseInstruction(moveInstructions) {
+    return moveInstructions.split("");
 }
 
-var Car = function(initialState){
+var Car = function (initialState) {
     var defaultState = getDefaultState();
     var positionX = defaultState.x;
     var positionY = defaultState.y;
     var direction = defaultState.d;
     var thisLandscape;
-    if (initialState){
+    var moveInstructions
+    if (initialState) {
         newState = parseState(initialState);
         positionX = newState.x;
         positionY = newState.y;
         direction = newState.d;
     }
 
-    addToLandscape = function (landscape){
-        if (landscape.Height >= positionY && landscape.Width >= positionX ){
+    addToLandscape = function (landscape) {
+        if (landscape.Height >= positionY && landscape.Width >= positionX) {
             thisLandscape = landscape;
         }
         return thisLandscape;
     }
 
-    processMoveInstruction = function(moveInstruction){
-        var instructionSet = parseInstruction(moveInstruction);
-        instructionSet.map(function(x){
-            switch (x){
+    processMoveInstruction = function () {
+        var instructionSet = parseInstruction(this.moveInstructions);
+        instructionSet.map(function (x) {
+            switch (x) {
                 case 'M':
                     moveForward();
-                break;
+                    break;
                 case 'L':
                     turn('L');
-                break;
+                    break;
                 case 'R':
                     turn('R');
-                break;
-                
+                    break;
+
             }
         });
-    
+
     }
 
-    function turn(LeftOrRight){
+    function turn(LeftOrRight) {
         var directionMapper = ['N', 'E', 'S', 'W'];
-        
-        switch (LeftOrRight){
+
+        switch (LeftOrRight) {
             case 'L':
-            direction = directionMapper[directionMapper.indexOf(direction) - 1];
-            if (direction === undefined) {direction = 'W'}
-            break;
+                direction = directionMapper[directionMapper.indexOf(direction) - 1];
+                if (direction === undefined) { direction = 'W' }
+                break;
             case 'R':
-            direction = directionMapper[directionMapper.indexOf(direction) + 1];
-            if (direction === undefined) {direction = 'N'}
-            break;
+                direction = directionMapper[directionMapper.indexOf(direction) + 1];
+                if (direction === undefined) { direction = 'N' }
+                break;
         }
     }
 
-    function moveForward(){
+    function moveForward() {
         var newX = positionX;
         var newY = positionY;
-        switch (direction){
+        switch (direction) {
             case 'N':
                 ++newY;
                 break;
@@ -104,24 +105,31 @@ var Car = function(initialState){
                 --newX;
                 break;
         }
-        if (newX <= thisLandscape.Width) { positionX = newX}
+        if (newX <= thisLandscape.Width) { positionX = newX }
 
-        if (newY <= thisLandscape.Height) {positionY = newY;}
+        if (newY <= thisLandscape.Height) { positionY = newY; }
 
     }
 
-    getPositionAndDirection = function(){
+    getPositionAndDirection = function () {
 
-        return [positionX, positionY, direction].join(' '); 
+        return {
+            PositionX: positionX,
+            PositionY: positionY,
+            Direction: direction
+        };
     }
+    getPositionAndDirectionAsString = function () {
+
+        return [positionX, positionY, direction].join(' ');
+    }
+
     return {
-        PositionX: positionX,
-        PositionY: positionY,
-        Direction: direction,
-        Landscape: thisLandscape,
+        moveInstructions: moveInstructions,
         addToLandscape,
         processMoveInstruction,
-        getPositionAndDirection
+        currentPosition: getPositionAndDirection,
+        currentPositionAsString: getPositionAndDirectionAsString
     }
 }
 module.exports.Car = Car;

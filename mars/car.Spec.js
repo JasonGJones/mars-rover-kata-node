@@ -12,21 +12,21 @@ describe('Car: ', ()=>{
 
     it('a raw Car should initialise to 0 0 North', ()=>{        
         car = new Car();
-        expect(car.PositionX).toEqual(0);
-        expect(car.PositionY).toEqual(0);
-        expect(car.Direction).toEqual('N');
+        expect(car.currentPosition().PositionX).toEqual(0);
+        expect(car.currentPosition().PositionY).toEqual(0);
+        expect(car.currentPosition().Direction).toEqual('N');
     })
     it('the initialised Car should hold its state', ()=>{        
         car = new Car('4 5 E');
-        expect(car.PositionX).toEqual('4');
-        expect(car.PositionY).toEqual('5');
-        expect(car.Direction).toEqual('E');
+        expect(car.currentPosition().PositionX).toEqual('4');
+        expect(car.currentPosition().PositionY).toEqual('5');
+        expect(car.currentPosition().Direction).toEqual('E');
     })
     it('a bad initialisation should set to 0 0 North', ()=>{        
         car = new Car(' rabbit');
-        expect(car.PositionX).toEqual(0);
-        expect(car.PositionY).toEqual(0);
-        expect(car.Direction).toEqual('N');
+        expect(car.currentPosition().PositionX).toEqual(0);
+        expect(car.currentPosition().PositionY).toEqual(0);
+        expect(car.currentPosition().Direction).toEqual('N');
     })
     it('a car should  be allowed to be placed inside of the landsape', ()=>{        
         landscape = new Landscape(10,20);
@@ -45,8 +45,9 @@ describe('Car: ', ()=>{
         landscape = new Landscape(5,5);
         car = new Car('1 2 N');
         car.addToLandscape(landscape);
-        car.processMoveInstruction('LMLMLMLMM');
-        expect(car.getPositionAndDirection()).toBe('1 3 N');
+        car.moveInstructions = 'LMLMLMLMM';
+        car.processMoveInstruction();
+        expect(car.currentPositionAsString()).toBe('1 3 N');
 
         
     })
@@ -55,8 +56,9 @@ describe('Car: ', ()=>{
         landscape = new Landscape(5,5);
         car = new Car('3 3 E');
         car.addToLandscape(landscape);
-        car.processMoveInstruction('MMRMMRMRRM');
-        expect(car.getPositionAndDirection()).toBe('5 1 E');
+        car.moveInstructions = 'MMRMMRMRRM';
+        car.processMoveInstruction();
+        expect(car.currentPositionAsString()).toBe('5 1 E');
 
         
     })
